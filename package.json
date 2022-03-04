@@ -1,0 +1,15 @@
+{
+  "name": "newsService",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/hrchild/newsService.git",
+  "author": "hwimer <hr.kim@infinigru.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "datatables.net-bs4": "^1.10.20",
+    "datatables.net-dt": "^1.10.20",
+    "jquery": "^3.4.1"
+
+  }
+}

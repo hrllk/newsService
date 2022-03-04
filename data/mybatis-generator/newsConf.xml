@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<!-- oracle lib location -->
+	<classPathEntry location="./mariadb-java-client-2.4.4.jar" />
+	<context id="DB2Tables" targetRuntime="MyBatis3">
+
+		<plugin type="org.mybatis.generator.plugins.ToStringPlugin">
+			<property name="useToStringFromRoot" value="true" />
+		</plugin>
+		<plugin type="org.mybatis.generator.plugins.MapperAnnotationPlugin"/>
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+		<!-- 다 가지고 오고 내부에서 짤라서 돌려주는 형태이므로 의미 없음. -->
+		<!-- <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin" /> -->
+
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+
+		<!-- oracle URL、username、password -->
+		<jdbcConnection driverClass="org.mariadb.jdbc.Driver" connectionURL="jdbc:mariadb://localhost:3306/news" userId="gvuser" password="root1234">
+		</jdbcConnection>
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<!-- model package and location -->
+		<javaModelGenerator targetPackage="com.example.news.web.model" targetProject="../../src/main/java">
+			<property name="enableSubPackages" value="true" />
+<!--			<property name="trimStrings" value="true" />-->
+		</javaModelGenerator>
+		<!-- mapping package and location -->
+		<sqlMapGenerator targetPackage="com.example.news.web.persistence" targetProject="../../src/main/resources">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<!-- dao package and location -->
+		<javaClientGenerator type="XMLMAPPER" targetPackage="com.example.news.web.persistence" targetProject="../../src/main/java">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+
+<!--		<table tableName="user" domainObjectName="User" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">-->
+<!--		</table>-->
+
+		<table tableName="news" domainObjectName="News" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+		</table>
+
+<!--		<table tableName="collection_keyword" domainObjectName="CollectionKeyword" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">-->
+<!--		</table>-->
+	</context>
+</generatorConfiguration>

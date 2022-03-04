@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.news.web.persistence.NewsMapper">
+  <resultMap id="BaseResultMap" type="com.example.news.web.model.News">
+    <id column="news_id" jdbcType="BIGINT" property="newsId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="provider_code" jdbcType="TINYINT" property="providerCode" />
+    <result column="provider" jdbcType="VARCHAR" property="provider" />
+    <result column="link" jdbcType="VARCHAR" property="link" />
+    <result column="originallink" jdbcType="VARCHAR" property="originallink" />
+    <result column="subject" jdbcType="VARCHAR" property="subject" />
+    <result column="collection_time" jdbcType="TIMESTAMP" property="collectionTime" />
+    <result column="pub_at" jdbcType="TIMESTAMP" property="pubAt" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.news.web.model.News">
+    <result column="contents" jdbcType="LONGVARCHAR" property="contents" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    news_id, user_id, provider_code, provider, link, originallink, subject, collection_time, 
+    pub_at
+  </sql>
+  <sql id="Blob_Column_List">
+    contents
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.example.news.web.model.NewsExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from news
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.example.news.web.model.NewsExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from news
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause} desc
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from news
+    where news_id = #{newsId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from news
+    where news_id = #{newsId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.example.news.web.model.NewsExample">
+    delete from news
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.example.news.web.model.News">
+    insert into news (news_id, user_id, provider_code, 
+      provider, link, originallink, 
+      subject, collection_time, pub_at, 
+      contents)
+    values (#{newsId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{providerCode,jdbcType=TINYINT}, 
+      #{provider,jdbcType=VARCHAR}, #{link,jdbcType=VARCHAR}, #{originallink,jdbcType=VARCHAR}, 
+      #{subject,jdbcType=VARCHAR}, #{collectionTime,jdbcType=TIMESTAMP}, #{pubAt,jdbcType=TIMESTAMP}, 
+      #{contents,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.news.web.model.News">
+    insert into news
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="newsId != null">
+        news_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="providerCode != null">
+        provider_code,
+      </if>
+      <if test="provider != null">
+        provider,
+      </if>
+      <if test="link != null">
+        link,
+      </if>
+      <if test="originallink != null">
+        originallink,
+      </if>
+      <if test="subject != null">
+        subject,
+      </if>
+      <if test="collectionTime != null">
+        collection_time,
+      </if>
+      <if test="pubAt != null">
+        pub_at,
+      </if>
+      <if test="contents != null">
+        contents,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="newsId != null">
+        #{newsId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="providerCode != null">
+        #{providerCode,jdbcType=TINYINT},
+      </if>
+      <if test="provider != null">
+        #{provider,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null">
+        #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="originallink != null">
+        #{originallink,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="collectionTime != null">
+        #{collectionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pubAt != null">
+        #{pubAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contents != null">
+        #{contents,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.news.web.model.NewsExample" resultType="java.lang.Long">
+    select count(*) from news
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update news
+    <set>
+      <if test="record.newsId != null">
+        news_id = #{record.newsId,jdbcType=BIGINT},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
+      <if test="record.providerCode != null">
+        provider_code = #{record.providerCode,jdbcType=TINYINT},
+      </if>
+      <if test="record.provider != null">
+        provider = #{record.provider,jdbcType=VARCHAR},
+      </if>
+      <if test="record.link != null">
+        link = #{record.link,jdbcType=VARCHAR},
+      </if>
+      <if test="record.originallink != null">
+        originallink = #{record.originallink,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subject != null">
+        subject = #{record.subject,jdbcType=VARCHAR},
+      </if>
+      <if test="record.collectionTime != null">
+        collection_time = #{record.collectionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.pubAt != null">
+        pub_at = #{record.pubAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.contents != null">
+        contents = #{record.contents,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update news
+    set news_id = #{record.newsId,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      provider_code = #{record.providerCode,jdbcType=TINYINT},
+      provider = #{record.provider,jdbcType=VARCHAR},
+      link = #{record.link,jdbcType=VARCHAR},
+      originallink = #{record.originallink,jdbcType=VARCHAR},
+      subject = #{record.subject,jdbcType=VARCHAR},
+      collection_time = #{record.collectionTime,jdbcType=TIMESTAMP},
+      pub_at = #{record.pubAt,jdbcType=TIMESTAMP},
+      contents = #{record.contents,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update news
+    set news_id = #{record.newsId,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      provider_code = #{record.providerCode,jdbcType=TINYINT},
+      provider = #{record.provider,jdbcType=VARCHAR},
+      link = #{record.link,jdbcType=VARCHAR},
+      originallink = #{record.originallink,jdbcType=VARCHAR},
+      subject = #{record.subject,jdbcType=VARCHAR},
+      collection_time = #{record.collectionTime,jdbcType=TIMESTAMP},
+      pub_at = #{record.pubAt,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.news.web.model.News">
+    update news
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="providerCode != null">
+        provider_code = #{providerCode,jdbcType=TINYINT},
+      </if>
+      <if test="provider != null">
+        provider = #{provider,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null">
+        link = #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="originallink != null">
+        originallink = #{originallink,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="collectionTime != null">
+        collection_time = #{collectionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pubAt != null">
+        pub_at = #{pubAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contents != null">
+        contents = #{contents,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where news_id = #{newsId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.news.web.model.News">
+    update news
+    set user_id = #{userId,jdbcType=BIGINT},
+      provider_code = #{providerCode,jdbcType=TINYINT},
+      provider = #{provider,jdbcType=VARCHAR},
+      link = #{link,jdbcType=VARCHAR},
+      originallink = #{originallink,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=VARCHAR},
+      collection_time = #{collectionTime,jdbcType=TIMESTAMP},
+      pub_at = #{pubAt,jdbcType=TIMESTAMP},
+      contents = #{contents,jdbcType=LONGVARCHAR}
+    where news_id = #{newsId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.news.web.model.News">
+    update news
+    set user_id = #{userId,jdbcType=BIGINT},
+      provider_code = #{providerCode,jdbcType=TINYINT},
+      provider = #{provider,jdbcType=VARCHAR},
+      link = #{link,jdbcType=VARCHAR},
+      originallink = #{originallink,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=VARCHAR},
+      collection_time = #{collectionTime,jdbcType=TIMESTAMP},
+      pub_at = #{pubAt,jdbcType=TIMESTAMP}
+    where news_id = #{newsId,jdbcType=BIGINT}
+  </update>
+</mapper>
