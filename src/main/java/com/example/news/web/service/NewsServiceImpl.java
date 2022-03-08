@@ -4,6 +4,8 @@ import com.example.news.web.model.*;
 import com.example.news.web.persistence.CollectionKeywordMapper;
 import com.example.news.web.persistence.NewsMapper;
 import com.example.news.web.persistence.UserMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Service
 public class NewsServiceImpl implements NewsService{
+
+    Logger logger = LoggerFactory.getLogger(NewsServiceImpl.class);
 
     @Autowired
     NewsMapper newsMapper;
@@ -53,6 +57,8 @@ public class NewsServiceImpl implements NewsService{
          * - 키워드등록에의한, (최초1회)
          *
          * */
+        logger.debug("userList: [{}]", userList);
+        logger.debug("keyword: [{}]", keyword);
 
         for (User user : userList) {
             // 키워드등록에의한경우,
@@ -101,10 +107,12 @@ public class NewsServiceImpl implements NewsService{
                 cExample.createCriteria()
                         .andUserIdEqualTo(user.getUserId());
                 List<CollectionKeyword> keywordList = collectionKeywordMapper.selectByExample(cExample);
+                logger.debug("userId: [{}] \t keywordList: [{}]", user.getUserId(), keywordList);
                 for (CollectionKeyword registeredKeyword : keywordList) {
                     if (user.getIsUseNaver() > 0) {
 
                         NaverNews naverNews = naverNewsService.getNaverNews(registeredKeyword.getKeyword());
+                        logger.debug("resNaverItem: [{}]", naverNews);
                         List<NaverNews.Items> items = naverNews.items;
                         for (int i = 0; i < items.size(); i++) {
                             /* 사용자가 소지하고있는 뉴스 중복 체크 */
@@ -137,10 +145,7 @@ public class NewsServiceImpl implements NewsService{
                     }
 
                 }
-                return null;
             }
-            return null;
-
         }
         return null;
     }
